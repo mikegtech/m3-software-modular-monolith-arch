@@ -26,13 +26,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore
-        run: dotnet restore M3.NET.sln
+        run: dotnet restore m3.net.sln
 
       - name: Build
-        run: dotnet build M3.NET.sln --configuration Release --no-restore
+        run: dotnet build m3.net.sln --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test M3.NET.sln --configuration Release --no-restore --no-build
+        run: dotnet test m3.net.sln --configuration Release --no-restore --no-build
 
       - name: Publish
-        run: dotnet publish M3.NET.sln --configuration Release --no-restore --no-build
+        run: dotnet publish m3.net.sln --configuration Release --no-restore --no-build
