@@ -26,7 +26,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     private readonly KeycloakContainer _keycloakContainer = new KeycloakBuilder()
         .WithImage("quay.io/keycloak/keycloak:latest")
         .WithResourceMapping(
-            new FileInfo("M3.Net-realm-export.json"),
+            new FileInfo("consulting-realm-export.json"),
             new FileInfo("/opt/keycloak/data/import/realm.json"))
         .WithCommand("--import-realm")
         .Build();
@@ -37,7 +37,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         Environment.SetEnvironmentVariable("ConnectionStrings:Cache", _redisContainer.GetConnectionString());
 
         string keycloakAddress = _keycloakContainer.GetBaseAddress();
-        string keyCloakRealmUrl = $"{keycloakAddress}realms/M3.Net";
+        string keyCloakRealmUrl = $"{keycloakAddress}realms/evently";
 
         Environment.SetEnvironmentVariable(
             "Authentication:MetadataAddress",
@@ -50,7 +50,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         {
             services.Configure<KeyCloakOptions>(o =>
             {
-                o.AdminUrl = $"{keycloakAddress}admin/realms/M3.Net/";
+                o.AdminUrl = $"{keycloakAddress}admin/realms/evently/";
                 o.TokenUrl = $"{keyCloakRealmUrl}/protocol/openid-connect/token";
             });
         });
