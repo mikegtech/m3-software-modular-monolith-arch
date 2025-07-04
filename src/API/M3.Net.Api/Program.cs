@@ -92,9 +92,9 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 string[] summaries =
 [
@@ -118,3 +118,5 @@ app.MapGet("/weatherforecast", () =>
 app.MapEndpoints();
 
 await app.RunAsync();
+
+public partial class Program;
