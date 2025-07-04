@@ -24,6 +24,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     private readonly KeycloakContainer _keycloakContainer = new KeycloakBuilder()
         .WithImage("quay.io/keycloak/keycloak:latest")
+        .WithName("m3.net.identity")
         .WithResourceMapping(
             new FileInfo("consulting-realm-export.json"),
             new FileInfo("/opt/keycloak/data/import/realm.json"))
