@@ -1,0 +1,95 @@
+services:
+  m3.net.api:
+    image: ${DOCKER_REGISTRY-}m3netapi
+    container_name: m3.net.api
+    build:
+      context: .
+      dockerfile: src/API/M3.Net.Api/Dockerfile
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    environment:
+      # Seq
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://m3.net.seq:5341/ingest/otlp
+      # - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      # - OTEL_EXPORTER_OTLP_ENDPOINT: "http://m3.net.jaeger:4317"
+      # Aspire Dashboard
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://m3.net.aspire-dashboard:18889
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp-gateway-prod-us-east-2.grafana.net/otlp
+      - OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic MTMwNTY1MzpnbGNfZXlKdklqb2lNVFEzTXpJeE5TSXNJbTRpT2lKemRHRmpheTB4TXpBMU5qVXpMVzkwYkhBdGQzSnBkR1V0WjNKaFptRnVZUzF0TXkxdVpYUWlMQ0pySWpvaU5scFlWVGg1T1ZVeWFtYzRialk0WlZNMlVXMVJNbVUzSWl3aWJTSTZleUp5SWpvaWNISnZaQzExY3kxbFlYTjBMVEFpZlgwPQ==
+
+  m3.net.postgres:
+    image: postgres:17.2 # or latest
+    container_name: m3.net.postgres
+    environment:
+      POSTGRES_DB: m3
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      
+    volumes:
+      - ./.containers/postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  m3.net.identity:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: m3.net.identity
+    command: start-dev # --import-realm
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files:/opt/keycloak/data/import
+    ports:
+      - 18080:8080
+      - 19090:9000    # management (health, metrics, etc.)
+
+  m3.net.seq:
+    image: datalust/seq:2024.3 # or latest
+    container_name: m3.net.seq
+    environment:
+      ACCEPT_EULA: "Y"
+    volumes:
+      - ./.containers/seq_data:/data
+    ports:
+      - 8080:80
+      - 5341:5341
+
+  m3.net.aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.0
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true
+    ports:
+      - 18888:18888
+
+  m3.net.redis:
+    image: redis:latest
+    container_name: m3.net.redis
+    restart: always
+    ports:
+      - 6379:6379
+
+  m3.net.jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: m3.net.jaeger
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 16686:16686
+
+  m3.net.queue:
+    image: rabbitmq:management-alpine
+    container_name: m3.net.queue
+    hostname: m3-queue
+    volumes:
+        - ./.containers/queue/data/:/var/lib/rabbitmq
+        - ./.containers/queue/log/:/var/log/rabbitmq
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - 5672:5672
+      - 15672:15672

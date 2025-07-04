@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\M3.Net.Common.Infrastructure\M3.Net.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\M3.Net.Modules.Users.Application\M3.Net.Modules.Users.Application.csproj" />
+    <ProjectReference Include="..\M3.Net.Modules.Users.Presentation\M3.Net.Modules.Users.Presentation.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="M3.Net.Modules.Users.IntegrationTests" />
+		<InternalsVisibleTo Include="M3.Net.IntegrationTests" />
+	</ItemGroup>
+</Project>

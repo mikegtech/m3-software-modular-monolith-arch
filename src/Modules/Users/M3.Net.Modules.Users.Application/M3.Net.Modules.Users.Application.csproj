@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\M3.Net.Common.Application\M3.Net.Common.Application.csproj" />
+    <ProjectReference Include="..\M3.Net.Modules.Users.Domain\M3.Net.Modules.Users.Domain.csproj" />
+    <ProjectReference Include="..\M3.Net.Modules.Users.IntegrationEvents\M3.Net.Modules.Users.IntegrationEvents.csproj" />
+  </ItemGroup>
+
+</Project>
