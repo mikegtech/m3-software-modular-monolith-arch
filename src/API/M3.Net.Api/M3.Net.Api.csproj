@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Modules\Users\M3.Net.Modules.Users.Infrastructure\M3.Net.Modules.Users.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Transcripts\M3.Net.Modules.Transcripts.Infrastructure\M3.Net.Modules.Transcripts.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
