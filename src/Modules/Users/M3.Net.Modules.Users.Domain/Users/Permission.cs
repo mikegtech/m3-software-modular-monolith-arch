@@ -19,6 +19,11 @@ public sealed class Permission
     public static readonly Permission GetTickets = new("tickets:read");
     public static readonly Permission CheckInTicket = new("tickets:check-in");
     public static readonly Permission GetEventStatistics = new("event-statistics:read");
+    public static readonly Permission GetTranscripts = new("transcripts:read");
+    public static readonly Permission CreateTranscript = new("transcripts:create");
+    public static readonly Permission UpdateTranscript = new("transcripts:update");
+    public static readonly Permission DeleteTranscript = new("transcripts:delete");
+    public static readonly Permission ManageTranscriptProcessing = new("transcripts:manage-processing");
 
     public Permission(string code)
     {

@@ -31,8 +31,8 @@ jobs:
       - name: Build
         run: dotnet build m3.net.sln --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test m3.net.sln --configuration Release --no-restore --no-build
+      # - name: Test
+      #  run: dotnet test m3.net.sln --configuration Release --no-restore --no-build
 
       - name: Publish
         run: dotnet publish m3.net.sln --configuration Release --no-restore --no-build

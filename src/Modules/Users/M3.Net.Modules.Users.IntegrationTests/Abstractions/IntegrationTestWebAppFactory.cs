@@ -24,7 +24,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     private readonly KeycloakContainer _keycloakContainer = new KeycloakBuilder()
         .WithImage("quay.io/keycloak/keycloak:latest")
-        .WithName("m3.net.identity")
+        //.WithName("m3.net.identity.ci")
         .WithResourceMapping(
             new FileInfo("consulting-realm-export.json"),
             new FileInfo("/opt/keycloak/data/import/realm.json"))
@@ -33,6 +33,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        _keycloakContainer.StartAsync().GetAwaiter().GetResult();
+
         Environment.SetEnvironmentVariable("ConnectionStrings:Database", _dbContainer.GetConnectionString());
         Environment.SetEnvironmentVariable("ConnectionStrings:Cache", _redisContainer.GetConnectionString());
 
@@ -60,7 +62,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     {
         await _dbContainer.StartAsync();
         await _redisContainer.StartAsync();
-        await _keycloakContainer.StartAsync();
+//        await _keycloakContainer.StartAsync();
     }
 
     public new async Task DisposeAsync()
