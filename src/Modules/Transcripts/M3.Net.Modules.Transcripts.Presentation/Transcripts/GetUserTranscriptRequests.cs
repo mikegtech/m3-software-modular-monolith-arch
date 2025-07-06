@@ -14,7 +14,7 @@ internal sealed class GetUserTranscriptRequests : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("transcripts/user/{userId:guid}/requests", async (Guid userId, int page, int pageSize, ISender sender) =>
+        app.MapGet("transcripts/user/{userId:guid}/requests", async (Guid userId, ISender sender, int page = 0, int pageSize = 25) =>
         {
             Result<IEnumerable<TranscriptRequestResponse>> result = await sender.Send(new GetUserTranscriptRequestsQuery(userId, page, pageSize));
 
@@ -23,6 +23,6 @@ internal sealed class GetUserTranscriptRequests : IEndpoint
         .RequireAuthorization()
         .WithTags(Tags.Transcripts)
         .WithSummary("Get transcript requests for a user")
-        .WithDescription("Retrieves all transcript requests made by the specified user");
+        .WithDescription("Retrieves all transcript requests made by the specified user with optional pagination (default: page=0, pageSize=25)");
     }
 }

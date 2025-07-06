@@ -13,7 +13,7 @@ internal sealed class RequestTranscript : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("transcripts/request", async (Request request, ISender sender) =>
+        app.MapPost("transcripts/request", async (RequestTranscriptRequest request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new RequestTranscriptCommand(
                 request.UserId,
@@ -27,7 +27,7 @@ internal sealed class RequestTranscript : IEndpoint
         .WithDescription("Submits a request to generate a transcript for the specified YouTube video URL");
     }
 
-    internal sealed class Request
+    internal sealed class RequestTranscriptRequest
     {
         public Guid UserId { get; init; }
         public string YouTubeUrl { get; init; } = string.Empty;

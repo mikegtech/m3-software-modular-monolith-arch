@@ -13,7 +13,7 @@ internal sealed class CompleteTranscript : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("transcripts/complete", async (Request request, ISender sender) =>
+        app.MapPost("transcripts/complete", async (CompleteTranscriptRequest request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new CompleteTranscriptCommand(
                 request.RequestId,
@@ -29,7 +29,7 @@ internal sealed class CompleteTranscript : IEndpoint
         .WithDescription("Marks a transcript as completed with the generated content (called by the Python microservice)");
     }
 
-    internal sealed class Request
+    internal sealed class CompleteTranscriptRequest
     {
         public Guid RequestId { get; init; }
         public string TranscriptContent { get; init; } = string.Empty;

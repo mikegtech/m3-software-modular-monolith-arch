@@ -13,7 +13,7 @@ internal sealed class UpdateProcessingStatus : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("transcripts/processing/{requestId:guid}/status", async (Guid requestId, Request request, ISender sender) =>
+        app.MapPut("transcripts/processing/{requestId:guid}/status", async (Guid requestId, UpdateProcessingStatusRequest request, ISender sender) =>
         {
             Result result = await sender.Send(new UpdateProcessingStatusCommand(
                 requestId,
@@ -28,7 +28,7 @@ internal sealed class UpdateProcessingStatus : IEndpoint
         .WithDescription("Updates the processing status of a transcript generation job (called by the Python microservice)");
     }
 
-    internal sealed class Request
+    internal sealed class UpdateProcessingStatusRequest
     {
         public int ProgressPercentage { get; init; }
         public string? StatusMessage { get; init; }
