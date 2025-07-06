@@ -2,6 +2,7 @@ using M3.Net.Common.Application.Authorization;
 using M3.Net.Common.Application.EventBus;
 using M3.Net.Common.Application.Messaging;
 using M3.Net.Common.Infrastructure.Outbox;
+using M3.Net.Common.Presentation.Endpoints;
 using M3.Net.Modules.Transcripts.Application.Abstractions.Data;
 using M3.Net.Modules.Transcripts.Domain.Transcripts;
 using M3.Net.Modules.Transcripts.Infrastructure.Database;
@@ -31,10 +32,7 @@ public static class TranscriptsModule
 
         services.AddInfrastructure(configuration);
 
-#pragma warning disable S1135 // Track uses of "TODO" tags
-        // TODO: Add endpoints when Presentation layer is implemented
-        // services.AddEndpoints(Presentation.AssemblyReference.Assembly);
-#pragma warning restore S1135
+        services.AddEndpoints(Presentation.AssemblyReference.Assembly);
 
         return services;
     }
@@ -89,12 +87,8 @@ public static class TranscriptsModule
         }
     }
 
-    private static void AddIntegrationEventHandlers(this IServiceCollection _)
+    private static void AddIntegrationEventHandlers(this IServiceCollection services)
     {
-#pragma warning disable S1135 // Track uses of "TODO" tags
-        // TODO: Add integration event handlers when Presentation layer is implemented
-        // The parameter is currently unused but will be needed when the Presentation layer is implemented
-        /*
         Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
             .GetTypes()
             .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
@@ -115,7 +109,5 @@ public static class TranscriptsModule
 
             services.Decorate(integrationEventHandler, closedIdempotentHandler);
         }
-        */
-#pragma warning restore S1135
     }
 }

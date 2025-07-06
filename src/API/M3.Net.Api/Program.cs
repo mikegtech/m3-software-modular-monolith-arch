@@ -33,7 +33,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDocumentation();
 
 Assembly[] moduleApplicationAssemblies = [
-    M3.Net.Modules.Users.Application.AssemblyReference.Assembly];
+    M3.Net.Modules.Users.Application.AssemblyReference.Assembly,
+    M3.Net.Modules.Transcripts.Application.AssemblyReference.Assembly];
 
 builder.Services.AddApplication(moduleApplicationAssemblies);
 
