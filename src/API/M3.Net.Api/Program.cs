@@ -11,6 +11,7 @@ using M3.Net.Common.Infrastructure;
 using M3.Net.Common.Infrastructure.Configuration;
 using M3.Net.Common.Infrastructure.EventBus;
 using M3.Net.Common.Presentation.Endpoints;
+using M3.Net.Modules.Transcripts.Infrastructure;
 using M3.Net.Modules.Users.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -63,9 +64,10 @@ builder.Services.AddHealthChecks()
     })
     .AddKeyCloak(keyCloakHealthUrl);
 
-builder.Configuration.AddModuleConfiguration(["users"]);
+builder.Configuration.AddModuleConfiguration(["users","transcripts"]);
 
 builder.Services.AddUsersModule(builder.Configuration);
+builder.Services.AddTranscriptsModule(builder.Configuration);
 
 WebApplication app = builder.Build();
 
