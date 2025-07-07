@@ -40,22 +40,6 @@ public static class TranscriptsModule
         return services;
     }
 
-    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator, string _)
-    {
-        // Configure consumers for integration events from Python services
-        registrationConfigurator.AddConsumer<TranscriptProcessingProgressIntegrationEventHandler>(
-            consumerConfigurator =>
-            {
-                consumerConfigurator.UseConcurrentMessageLimit(10);
-            });
-
-        registrationConfigurator.AddConsumer<TranscriptProcessingCompletedIntegrationEventHandler>(
-            consumerConfigurator =>
-            {
-                consumerConfigurator.UseConcurrentMessageLimit(10);
-            });
-    }
-
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<TranscriptsDbContext>((sp, options) =>

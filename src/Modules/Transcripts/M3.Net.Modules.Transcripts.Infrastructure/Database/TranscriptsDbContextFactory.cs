@@ -11,15 +11,14 @@ public sealed class TranscriptsDbContextFactory : IDesignTimeDbContextFactory<Tr
 {
     public TranscriptsDbContext CreateDbContext(string[] args)
     {
-        var configuration = new ConfigurationBuilder()
+        IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: true)
             .AddJsonFile("appsettings.Development.json", optional: true)
             .AddEnvironmentVariables()
             .Build();
 
-        var connectionString = configuration.GetConnectionString("Database")
-            ?? "Host=localhost;Database=m3net;Username=postgres;Password=postgres";
+        string connectionString = configuration.GetConnectionString("Database");
 
         var optionsBuilder = new DbContextOptionsBuilder<TranscriptsDbContext>();
         optionsBuilder.UseNpgsql(connectionString, options =>

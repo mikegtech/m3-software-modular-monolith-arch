@@ -1,3 +1,7 @@
+networks:
+  agent-network:
+    name: agent-network
+
 services:
   m3.net.api:
     image: ${DOCKER_REGISTRY-}m3netapi
@@ -105,3 +109,47 @@ services:
       - RABBITMQ_URL=amqp://guest:guest@m3-queue:5672
     depends_on:
       - m3.net.queue
+  transcript-mcp:
+    container_name: transcript-mcp
+    build:
+      context: ./src/python/transcript-mcp
+    ports:
+      - "9090:9090"
+    env_file:
+      - ./src/python/transcript-mcp/.env
+    networks:
+      - agent-network
+    environment:
+      - HF_HOME=/root/.cache/huggingface
+    volumes:
+      - ./.containers/.vscode:/app/.vscode
+      - ./.files/shared_media:/app/shared_media
+      - ./.containers/.cache:/root/.cache
+      - ./.containers/.cache/huggingface:/root/.cache/huggingface
+
+    deploy:
+      resources:
+        limits:
+          cpus: '4' 
+          memory: 4G   
+        reservations:
+          cpus: '4'    
+          memory: 4G   
+
+  transcript-api:
+    container_name: transcript-api
+    build:
+      context: ./src/python/transcript-api
+    ports:
+      - "8080:8080"
+    environment:
+      - DISABLE_NEST_ASYNCIO=True
+    env_file:
+      - ./src/python/transcript-api/.env
+    networks:
+      - agent-network
+    depends_on:
+      - transcript-mcp
+    volumes:
+      - ./.files/shared_media:/app/shared_media
+      - ./.containers/.vscode:/app/.vscode
