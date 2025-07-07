@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from . import logger
+from loguru import logger
 from .transcripts_consumer import TranscriptsConsumer
 
-logger = logger.bind(name="TranscriptsConsumer")
+logger = logger.bind(name="TranscriptsConsumerManager")
 
 consumer = TranscriptsConsumer()
 

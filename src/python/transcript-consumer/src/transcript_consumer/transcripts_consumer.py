@@ -7,7 +7,8 @@ from typing import Any
 import aio_pika
 import aiofiles
 
-from . import logger
+from loguru import logger
+logger = logger.bind(name="TranscriptsConsumer")
 
 RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
 

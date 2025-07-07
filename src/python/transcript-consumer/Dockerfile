@@ -10,4 +10,4 @@ WORKDIR /app
 RUN uv sync --frozen --no-cache
 RUN uv pip install -e .
 
-ENTRYPOINT ["uvicorn", "transcripts.app:app", "--host", "0.0.0.0", "--port", "8080", "--lifespan", "on"]
+CMD ["/app/.venv/bin/python", "src/transcript_consumer/app.py", "--port", "8080", "--host", "0.0.0.0"]
