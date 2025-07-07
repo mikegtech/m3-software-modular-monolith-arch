@@ -403,3 +403,4 @@ FodyWeavers.xsd
 .files
 **/appsettings.Development.json
 **/modules.*.Development.json
+docs/Whisper_API_json
