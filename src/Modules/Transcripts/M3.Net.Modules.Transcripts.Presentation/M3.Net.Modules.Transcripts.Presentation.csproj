@@ -4,6 +4,7 @@
     <ProjectReference Include="..\..\..\Common\M3.Net.Common.Infrastructure\M3.Net.Common.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Common\M3.Net.Common.Presentation\M3.Net.Common.Presentation.csproj" />
     <ProjectReference Include="..\M3.Net.Modules.Transcripts.Application\M3.Net.Modules.Transcripts.Application.csproj" />
+    <ProjectReference Include="..\M3.Net.Modules.Transcripts.IntegrationEvents\M3.Net.Modules.Transcripts.IntegrationEvents.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

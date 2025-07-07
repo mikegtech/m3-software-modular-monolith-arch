@@ -17,6 +17,8 @@ from transcript_api.config import get_settings
 from transcript_api.models import (
     AssistantMessageResponse,
     ProcessVideoRequest,
+    ProcessVideoFromConsumerRequest,
+    ProcessVideoFromConsumerResponse,
     ProcessVideoResponse,
     ResetMemoryResponse,
     UserMessageRequest,
@@ -85,8 +87,10 @@ async def process_video(request: ProcessVideoRequest, bg_tasks: BackgroundTasks,
     """
     Process a video and return the results
     """
+    video_path = request.video_path
     task_id = str(uuid4())
     bg_task_states = fastapi_request.app.state.bg_task_states
+    bg_task_states[task_id] = TaskStatus.PENDING
 
     async def background_process_video(video_path: str, task_id: str):
         """
@@ -110,6 +114,51 @@ async def process_video(request: ProcessVideoRequest, bg_tasks: BackgroundTasks,
 
     bg_tasks.add_task(background_process_video, request.video_path, task_id)
     return ProcessVideoResponse(message="Task enqueued for processing", task_id=task_id)
+
+
+@app.post("/process-video-from-consumer", response_model=ProcessVideoFromConsumerResponse)
+async def process_video_from_consumer(request: ProcessVideoFromConsumerRequest, fastapi_request: Request):
+    """
+    Process a video request from the transcript-consumer service
+    This endpoint handles YouTube URLs and performs full transcript processing
+    """
+    try:
+        logger.info(f"Processing video from consumer: {request.request_id} - {request.video_path}")
+        
+        # Use the AI agent to process the video/YouTube URL
+        agent = fastapi_request.app.state.agent
+        await agent.setup()
+        
+        # Create a message to process the YouTube video
+        message = f"Please download and transcribe this YouTube video: {request.video_path}"
+        
+        # Call the agent to process the video
+        response = await agent.chat(message, request.video_path, None)
+        
+        # Extract transcript content from the response
+        # Note: This is a simplified approach - you might want to use specific tools
+        # or have the MCP server return structured transcript data
+        transcript_content = response.message
+        
+        logger.info(f"Successfully processed video for request {request.request_id}")
+        
+        return ProcessVideoFromConsumerResponse(
+            request_id=request.request_id,
+            success=True,
+            transcript_content=transcript_content,
+            error_message=None
+        )
+        
+    except Exception as e:
+        error_msg = f"Error processing video for request {request.request_id}: {str(e)}"
+        logger.error(error_msg)
+        
+        return ProcessVideoFromConsumerResponse(
+            request_id=request.request_id,
+            success=False,
+            transcript_content=None,
+            error_message=error_msg
+        )
 
 
 @app.post("/chat", response_model=AssistantMessageResponse)
@@ -182,6 +231,51 @@ async def serve_media(file_path: str):
     except Exception as e:
         logger.error(f"Error serving media file {file_path}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/process-video-from-consumer", response_model=ProcessVideoFromConsumerResponse)
+async def process_video_from_consumer(request: ProcessVideoFromConsumerRequest, fastapi_request: Request):
+    """
+    Process a video request from the transcript-consumer service
+    This endpoint handles YouTube URLs and performs full transcript processing
+    """
+    try:
+        logger.info(f"Processing video from consumer: {request.request_id} - {request.video_path}")
+        
+        # Use the AI agent to process the video/YouTube URL
+        agent = fastapi_request.app.state.agent
+        await agent.setup()
+        
+        # Create a message to process the YouTube video
+        message = f"Please download and transcribe this YouTube video: {request.video_path}"
+        
+        # Call the agent to process the video
+        response = await agent.chat(message, request.video_path, None)
+        
+        # Extract transcript content from the response
+        # Note: This is a simplified approach - you might want to use specific tools
+        # or have the MCP server return structured transcript data
+        transcript_content = response.message
+        
+        logger.info(f"Successfully processed video for request {request.request_id}")
+        
+        return ProcessVideoFromConsumerResponse(
+            request_id=request.request_id,
+            success=True,
+            transcript_content=transcript_content,
+            error_message=None
+        )
+        
+    except Exception as e:
+        error_msg = f"Error processing video for request {request.request_id}: {str(e)}"
+        logger.error(error_msg)
+        
+        return ProcessVideoFromConsumerResponse(
+            request_id=request.request_id,
+            success=False,
+            transcript_content=None,
+            error_message=error_msg
+        )
 
 
 @click.command()

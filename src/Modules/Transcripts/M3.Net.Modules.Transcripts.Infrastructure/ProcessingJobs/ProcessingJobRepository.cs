@@ -29,8 +29,8 @@ internal sealed class ProcessingJobRepository(TranscriptsDbContext context) : IP
     {
         DateTime timeoutThreshold = DateTime.UtcNow.Subtract(timeout);
         return await context.ProcessingJobs
-            .Where(pj => pj.Status == ProcessingJobStatus.InProgress && 
-                        pj.StartedAt.HasValue && 
+            .Where(pj => pj.Status == ProcessingJobStatus.InProgress &&
+                        pj.StartedAt.HasValue &&
                         pj.StartedAt.Value < timeoutThreshold)
             .ToListAsync(cancellationToken);
     }

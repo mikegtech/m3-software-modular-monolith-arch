@@ -1,8 +1,24 @@
 from pydantic import BaseModel, Field
+from uuid import UUID
 
 
 class ProcessVideoRequest(BaseModel):
     video_path: str
+
+
+class ProcessVideoFromConsumerRequest(BaseModel):
+    """Request from transcript-consumer service"""
+    video_path: str  # YouTube URL in this case
+    request_id: str  # UUID from .NET
+    user_id: str     # UUID from .NET
+
+
+class ProcessVideoFromConsumerResponse(BaseModel):
+    """Response back to transcript-consumer service"""
+    request_id: str
+    success: bool
+    transcript_content: str | None = None
+    error_message: str | None = None
 
 
 class ProcessVideoResponse(BaseModel):

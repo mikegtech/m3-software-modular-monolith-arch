@@ -12,6 +12,9 @@ using M3.Net.Modules.Transcripts.Infrastructure.ProcessingJobs;
 using M3.Net.Modules.Transcripts.Infrastructure.TranscriptDeliveries;
 using M3.Net.Modules.Transcripts.Infrastructure.TranscriptRequests;
 using M3.Net.Modules.Transcripts.Infrastructure.Transcripts;
+using M3.Net.Modules.Transcripts.IntegrationEvents;
+using M3.Net.Modules.Transcripts.Presentation.TranscriptProcessing;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +38,22 @@ public static class TranscriptsModule
         services.AddEndpoints(Presentation.AssemblyReference.Assembly);
 
         return services;
+    }
+
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator, string _)
+    {
+        // Configure consumers for integration events from Python services
+        registrationConfigurator.AddConsumer<TranscriptProcessingProgressIntegrationEventHandler>(
+            consumerConfigurator =>
+            {
+                consumerConfigurator.UseConcurrentMessageLimit(10);
+            });
+
+        registrationConfigurator.AddConsumer<TranscriptProcessingCompletedIntegrationEventHandler>(
+            consumerConfigurator =>
+            {
+                consumerConfigurator.UseConcurrentMessageLimit(10);
+            });
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

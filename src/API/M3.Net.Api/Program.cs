@@ -44,7 +44,7 @@ var rabbitMqSettings = new RabbitMqSettings(builder.Configuration.GetConnectionS
 
 builder.Services.AddInfrastructure(
     DiagnosticsConfig.ServiceName,
-    [],
+    [M3.Net.Modules.Transcripts.Infrastructure.TranscriptsModule.ConfigureConsumers],
     rabbitMqSettings,
     databaseConnectionString,
     redisConnectionString);
@@ -65,7 +65,7 @@ builder.Services.AddHealthChecks()
     })
     .AddKeyCloak(keyCloakHealthUrl);
 
-builder.Configuration.AddModuleConfiguration(["users","transcripts"]);
+builder.Configuration.AddModuleConfiguration(["users", "transcripts"]);
 
 builder.Services.AddUsersModule(builder.Configuration);
 builder.Services.AddTranscriptsModule(builder.Configuration);

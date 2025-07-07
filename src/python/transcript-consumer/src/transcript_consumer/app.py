@@ -22,14 +22,26 @@ async def lifespan(app: FastAPI):  # noqa: ANN201, ARG001
     logger.info("Transcripts Consumer: Shut down complete")
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="Transcript Consumer Service",
+    description="Consumer service for processing transcript requests from .NET M3 system",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
-@app.get("/list-items")
-async def list_items():
-    result = await consumer.get_items()
-    return {"items": result}
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for monitoring"""
+    return {"status": "healthy", "service": "transcript-consumer"}
+
+@app.get("/processed-requests")
+async def list_processed_requests():
+    """List all processed transcript requests"""
+    result = await consumer.get_processed_requests()
+    return {"processed_requests": result}
 
 @app.get("/info")
 async def info():
+    """Get consumer statistics and information"""
     result = await consumer.info()
     return {"info": result}
