@@ -1,6 +1,15 @@
 networks:
-  agent-network:
-    name: agent-network
+  agent-ne    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Seq
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://m3.net.seq:5341/ingest/otlp
+      # - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      # - OTEL_EXPORTER_OTLP_ENDPOINT: "http://m3.net.jaeger:4317"
+      # Aspire Dashboard
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://m3.net.aspire-dashboard:18889
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp-gateway-prod-us-east-2.grafana.net/otlp
+      - OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic MTMwNTY1MzpnbGNfZXlKdklqb2lNVFEzTXpJeE5TSXNJbTRpT2lKemRHRmpheTF4TXpBMU5qVXpMVzkwYkhBdGQzSnBkR1V0WjNKaFptRnVZUzF0TXkxdVpYUWlMQ0pySWpvaU5scFlWVGg1T1ZVeWFtYzRialo0WlZNMlVXMVJNbVUzSWl3aWJTSTZleUp5SWpvaWNISnZaQzExY3kxbFlYTjBMVEFpZlgwPQ== name: agent-network
 
 services:
   m3.net.api:
@@ -14,6 +23,10 @@ services:
       - "5001:8081"
     networks:
       - agent-network
+    depends_on:
+      - m3.net.postgres
+      - m3.net.redis
+      - m3.net.queue
     environment:
       # Seq
       # - OTEL_EXPORTER_OTLP_ENDPOINT=http://m3.net.seq:5341/ingest/otlp

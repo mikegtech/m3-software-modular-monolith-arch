@@ -158,16 +158,16 @@ OPIK_PROJECT=transcript-mcp
 #### Development Mode
 ```bash
 # With uv
-uv run python src/kubrick_mcp/server.py --port 9090 --host 0.0.0.0
+uv run python src/transcript_mcp/server.py --port 9090 --host 0.0.0.0
 
 # Direct execution
-python src/kubrick_mcp/server.py --port 9090 --host 0.0.0.0 --transport streamable-http
+python src/transcript_mcp/server.py --port 9090 --host 0.0.0.0 --transport streamable-http
 ```
 
 #### Production Mode
 ```bash
 # With production settings
-python src/kubrick_mcp/server.py --port 9090 --host 0.0.0.0 --transport streamable-http
+python src/transcript_mcp/server.py --port 9090 --host 0.0.0.0 --transport streamable-http
 ```
 
 #### Docker
@@ -516,7 +516,7 @@ logger.bind(name="VideoProcessor").info(
 ```
 transcript-mcp/
 ├── src/
-│   └── kubrick_mcp/
+│   └── transcript_mcp/
 │       ├── video/                        # Video processing modules
 │       │   ├── ingestion/               # Video ingestion pipeline
 │       │   │   ├── video_processor.py   # Main video processing logic
@@ -813,7 +813,7 @@ ffmpeg -version
 echo $OPENAI_API_KEY
 
 # Check logs
-python src/kubrick_mcp/server.py --port 9090
+python src/transcript_mcp/server.py --port 9090
 
 # Docker logs
 docker logs transcript-mcp
@@ -839,13 +839,13 @@ ls -la ~/.pixeltable/
 ```bash
 # Verify video is indexed
 python -c "
-import kubrick_mcp.video.ingestion.registry as registry
+import transcript_mcp.video.ingestion.registry as registry
 print(registry.list_tables())
 "
 
 # Check embeddings
 python -c "
-from kubrick_mcp.video.video_search_engine import VideoSearchEngine
+from transcript_mcp.video.video_search_engine import VideoSearchEngine
 engine = VideoSearchEngine('video.mp4')
 results = engine.search_by_speech('test query', 5)
 print(results)
@@ -853,7 +853,7 @@ print(results)
 
 # Verify search engine setup
 python -c "
-from kubrick_mcp.video.video_search_engine import VideoSearchEngine
+from transcript_mcp.video.video_search_engine import VideoSearchEngine
 try:
     engine = VideoSearchEngine('nonexistent.mp4')
 except ValueError as e:

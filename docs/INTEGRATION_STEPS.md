@@ -112,7 +112,7 @@ uv sync  # or pip install -e .
 ```bash
 # Terminal 1: Start transcript-mcp server
 cd src/python/transcript-mcp
-uv run python src/kubrick_mcp/server.py
+uv run python src/transcript_mcp/server.py
 
 # Terminal 2: Start transcript-api
 cd src/python/transcript-api

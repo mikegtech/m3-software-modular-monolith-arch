@@ -1,0 +1,22 @@
+version: '3'
+dotenv: [.env]
+
+vars:
+  PACKAGE_IMPORT_NAME: transcript-videos
+  PYTHON_VERSION: 3.12
+
+tasks:
+  build-transcript:
+    desc: Build the transcript videos package
+    cmds:
+      - docker compose build
+
+  start-transcript:
+    desc: Start the transcript videos package
+    cmds:
+      - docker compose up --build -d
+
+  stop-transcript:
+    desc: Stop the transcript videos package
+    cmds:
+      - docker compose down
