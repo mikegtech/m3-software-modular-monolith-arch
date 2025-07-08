@@ -15,6 +15,7 @@ services:
     networks:
       - agent-network
     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
       # Seq
       # - OTEL_EXPORTER_OTLP_ENDPOINT=http://m3.net.seq:5341/ingest/otlp
       # - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
